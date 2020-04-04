@@ -4,8 +4,6 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -20,9 +18,7 @@ public class OrderDetail implements Serializable
     private static final long serialVersionUID = -7039713787520750000L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = false, nullable = false)
-    private Long id;
+    private String id;
 
     @Column(name = "distance", nullable = false)
     private Integer distance;
@@ -30,12 +26,12 @@ public class OrderDetail implements Serializable
     @Column(name = "status", nullable = false)
     private String status;
 
-    public Long getId()
+    public String getId()
     {
         return id;
     }
 
-    public void setId(Long id)
+    public void setId(String id)
     {
         this.id = id;
     }

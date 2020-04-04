@@ -26,32 +26,13 @@ public class OrderExceptionHandler
         return new ErrorInformationModel(ex.getMessage());
     }
     
-    @ExceptionHandler(value = IOException.class)
+    @ExceptionHandler({ IOException.class, DatabaseException.class, DataNotFoundException.class })
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
-    public ErrorInformationModel connectionError(IOException ex)
+    public ErrorInformationModel connectionError(Exception ex)
     {
-        LOGGER.error("Connection error", ex);
+        LOGGER.error("Internal Server Error", ex);
         return new ErrorInformationModel(ex.getMessage());
     }
-
-//    @ExceptionHandler(value = ApiClientException.class)
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    @ResponseBody
-//    public ErrorInformationModel invalidInputError(ApiClientException e)
-//    {
-//        LOGGER.error("Bad request", e);
-//        return new ErrorInformationModel(e.getMessage());
-//    }
-//
-
-//
-//    @ExceptionHandler(value = DataNotFoundException.class)
-//    @ResponseStatus(HttpStatus.NO_CONTENT)
-//    public void dataNotFoundError(DataNotFoundException e)
-//    {
-//        LOGGER.error("No data found", e);
-//
-//    }
-
+ 
 }

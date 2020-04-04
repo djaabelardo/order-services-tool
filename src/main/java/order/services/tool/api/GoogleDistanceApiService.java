@@ -6,6 +6,7 @@ import static order.services.tool.utils.Constants.KEY;
 import static order.services.tool.utils.Constants.ORIGINS;
 
 import java.io.IOException;
+import java.net.URI;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -46,7 +47,9 @@ public class GoogleDistanceApiService
                 .queryParam(DESTINATIONS, destination)
                 .queryParam(KEY, connectionConfig.getKey());
 
-        final ResponseEntity<String> response = this.restTemplate.exchange(builder.build().toUri(), HttpMethod.GET, requestEntity, String.class);
+        URI uri = builder.build(true).toUri();
+        
+        final ResponseEntity<String> response = this.restTemplate.exchange(uri, HttpMethod.GET, requestEntity, String.class);
 
         if (response.getStatusCode().equals(HttpStatus.OK))
         {

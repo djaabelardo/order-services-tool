@@ -7,18 +7,23 @@ import static order.services.tool.utils.Constants.STATUS_UNASSIGNED;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import order.services.tool.api.Distance;
 import order.services.tool.api.Element;
 import order.services.tool.api.GoogleDistanceApiService;
 import order.services.tool.api.GoogleDistanceResponse;
 import order.services.tool.api.Row;
+import order.services.tool.exception.DataNotFoundException;
+import order.services.tool.exception.DatabaseException;
 import order.services.tool.model.OrderDetail;
 import order.services.tool.model.OrderLocationRequest;
+import order.services.tool.repository.OrderRepository;
 
 @Service
 public class OrderService
@@ -26,6 +31,9 @@ public class OrderService
 
     @Autowired
     private GoogleDistanceApiService googleDistanceApiService;
+    
+    @Autowired
+    private OrderRepository orderRepository;
 
     public OrderDetail postOrder(OrderLocationRequest request) throws IOException
     {
@@ -40,6 +48,16 @@ public class OrderService
         {
             calculateTotalDistance(orderDetail, response);
             orderDetail.setStatus(STATUS_UNASSIGNED);
+            orderDetail.setId(UUID.randomUUID().toString());
+            
+            try
+            {
+                orderRepository.save(orderDetail);
+            }
+            catch (Exception e)
+            {
+                throw new DatabaseException(e.getMessage());
+            }
 
         }
         return orderDetail;
@@ -59,6 +77,10 @@ public class OrderService
                 .map(Distance::getValue)
                 .collect(Collectors.toList());
 
+        if (CollectionUtils.isEmpty(distances))
+        {
+            throw new DataNotFoundException("Distance not found.");
+        }
         orderDetail.setDistance(distances.stream().mapToInt(Integer::intValue).sum());
     }
 
