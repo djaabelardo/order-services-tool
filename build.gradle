@@ -1,0 +1,79 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.0.RELEASE")
+    }
+}
+
+plugins {
+    id 'java'
+    id 'application'
+    id 'distribution'
+    id "io.spring.dependency-management" version "1.0.6.RELEASE"
+}
+
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'eclipse'
+apply plugin: 'jacoco'
+
+
+ext {
+    artifactName = 'order-services-tool'
+    groupName = 'order.services.tool'
+    springBootVersion = '2.0.3.RELEASE'
+    springBootActuatorVersion = '2.0.3.RELEASE'
+    springAopVersion = '5.0.7.RELEASE'
+    junitVersion = '4.12'
+    commonsLangVersion = '3.7'
+    httpClientVersion = '4.5.5'
+    jsonVersion="20171018"
+}
+
+group = groupName
+
+springBoot {
+    buildInfo {
+        properties {
+            artifact = rootProject.name
+            version = projectVersion
+            group = projectGroupId
+            name = rootProject.name
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    compile "org.springframework.boot:spring-boot-starter-web" 
+    compile "org.springframework.boot:spring-boot-starter-actuator"
+
+    compile 'org.springframework.boot:spring-boot-starter'
+    compile 'com.fasterxml.jackson.core:jackson-databind'
+
+    compile "org.apache.commons:commons-lang3:${commonsLangVersion}"
+    compile "org.apache.httpcomponents:httpclient:${httpClientVersion}"
+
+    testCompile "junit:junit:${junitVersion}"
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+
+    compile "org.json:json:${jsonVersion}"
+    
+    // This dependency is used by the application.
+    implementation 'com.google.guava:guava:28.1-jre'
+
+    // Use JUnit test framework
+    testImplementation 'junit:junit:4.12'
+}
+
+application {
+    // Define the main class for the application.
+    mainClassName = 'order.services.tool.App'
+}
