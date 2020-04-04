@@ -31,6 +31,8 @@ ext {
     commonsLangVersion = '3.7'
     httpClientVersion = '4.5.5'
     jsonVersion="20171018"
+    mongobeeVersion="0.13"
+    mysqlVersion = "8.0.19"
 }
 
 group = groupName
@@ -57,9 +59,12 @@ dependencies {
 
     compile 'org.springframework.boot:spring-boot-starter'
     compile 'com.fasterxml.jackson.core:jackson-databind'
-
+    compile ("org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}")
+    compile "mysql:mysql-connector-java:${mysqlVersion}"
     compile "org.apache.commons:commons-lang3:${commonsLangVersion}"
     compile "org.apache.httpcomponents:httpclient:${httpClientVersion}"
+    compile("org.springframework.boot:spring-boot-starter-data-mongodb:${springBootVersion}")
+    compile("com.github.mongobee:mongobee:${mongobeeVersion}")
 
     testCompile "junit:junit:${junitVersion}"
     testCompile 'org.springframework.boot:spring-boot-starter-test'

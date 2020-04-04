@@ -1,0 +1,31 @@
+# MongoDB properties
+spring:
+  data:
+    mongodb:
+      uri: mongodb://127.0.0.1:27017/local
+  dataSource:
+    url: jdbc:mysql://localhost:3306/orders
+    username: root
+    password: password
+  jpa:
+    show-sql: true
+    hibernate:
+      generate-ddl: true
+      ddl-auto: create
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+    
+google-distance:
+  api:
+    url: https://maps.googleapis.com/maps/api
+    contextPath: /distancematrix/json
+    key: AIzaSyB1kvAJG6g3PHdlgjk7fl8tLl1YZL1p7Ww
+    connectionTimeout: 30000
+    readTimeout: 30000
+      
+server:
+  port: 8080
+  ssl:
+    enabled: false
