@@ -1,12 +1,16 @@
 package order.services.tool.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +26,7 @@ import order.services.tool.model.OrderStatusRequest;
 import order.services.tool.service.OrderService;
 
 @RestController
+@Validated
 public class OrderController
 {
     
@@ -45,12 +50,10 @@ public class OrderController
     
     @GetMapping(path = "/orders", consumes = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseStatus(HttpStatus.OK)
-    public OrderDetail getOrder(@RequestParam(required = true, defaultValue = "1") Integer page,
-            @RequestParam(required = true) Integer limit)
+    public List<OrderDetail> getOrder(@NotNull @Min(1) @RequestParam Integer page,
+            @NotNull @Min(1) @RequestParam Integer limit)
     {
-
-        return null;
-
+        return orderService.getPaginatedOrders(page, limit);
     }
 
 }

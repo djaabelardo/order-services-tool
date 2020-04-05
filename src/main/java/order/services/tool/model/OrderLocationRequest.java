@@ -6,16 +6,20 @@ import java.util.List;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import order.services.tool.validator.LocationPattern;
+
 public class OrderLocationRequest implements Serializable {
 
     private static final long serialVersionUID = 5117325544924979724L;
 
     @NotEmpty
     @Size(min=2, max=2)
+    @LocationPattern
     private List<String> origin;
     
     @NotEmpty
     @Size(min=2, max=2)
+    @LocationPattern
     private List<String> destination;
 
     public List<String> getOrigin()

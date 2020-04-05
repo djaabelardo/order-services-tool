@@ -1,6 +1,11 @@
 # MongoDB properties
 spring:
+  profiles:
+    active: local
   data:
+    web:
+      pageable:
+        one-indexed-parameters: true
     mongodb:
       uri: mongodb://127.0.0.1:27017/local
   dataSource:

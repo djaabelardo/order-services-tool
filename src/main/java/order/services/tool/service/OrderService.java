@@ -2,9 +2,9 @@ package order.services.tool.service;
 
 import static order.services.tool.utils.Constants.COMMA;
 import static order.services.tool.utils.Constants.STATUS_OK;
-import static order.services.tool.utils.Constants.STATUS_UNASSIGNED;
 import static order.services.tool.utils.Constants.STATUS_SUCCESS;
 import static order.services.tool.utils.Constants.STATUS_TAKEN;
+import static order.services.tool.utils.Constants.STATUS_UNASSIGNED;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -13,6 +13,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -113,5 +117,13 @@ public class OrderService
         orderDetail.setStatus(STATUS_SUCCESS);
         return orderDetail;
 
+    }
+
+    public List<OrderDetail> getPaginatedOrders(Integer page, Integer limit){
+        
+        Pageable paging = PageRequest.of(page - 1, limit, Sort.by("distance"));
+        Page<OrderDetail> pagedResult = orderRepository.findAll(paging);
+        
+        return pagedResult.getContent();
     }
 }
