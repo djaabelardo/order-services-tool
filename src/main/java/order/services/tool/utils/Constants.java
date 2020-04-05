@@ -15,4 +15,5 @@ public class Constants
     public static final String ORIGINS = "origins";
     public static final String DESTINATIONS = "destinations";
     public static final String KEY = "key";
+    public static final String ORDER_ENDPOINT = "/orders";
 }

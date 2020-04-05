@@ -1,13 +1,13 @@
-package order.services.tool.api;
+package order.services.tool.api.model;
 
 import java.io.Serializable;
 
-public class Distance implements Serializable {
+public class Duration implements Serializable {
 
-    private static final long serialVersionUID = 5117325544924979724L;
-
+    private static final long serialVersionUID = 5190584668680054337L;
+    
     private String text;
-    private Integer value;
+    private Long value;
     
     public String getText()
     {
@@ -17,11 +17,11 @@ public class Distance implements Serializable {
     {
         this.text = text;
     }
-    public Integer getValue()
+    public Long getValue()
     {
         return value;
     }
-    public void setValue(Integer value)
+    public void setValue(Long value)
     {
         this.value = value;
     }

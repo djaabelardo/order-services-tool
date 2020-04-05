@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
-import order.services.tool.api.ClientErrorHandler;
 import order.services.tool.api.GoogleDistanceApiService;
+import order.services.tool.exception.ClientErrorHandler;
 
 @Configuration
 @ConfigurationProperties(prefix = "google-distance.api")

@@ -21,11 +21,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import order.services.tool.api.Distance;
-import order.services.tool.api.Element;
 import order.services.tool.api.GoogleDistanceApiService;
-import order.services.tool.api.GoogleDistanceResponse;
-import order.services.tool.api.Row;
+import order.services.tool.api.model.Distance;
+import order.services.tool.api.model.Element;
+import order.services.tool.api.model.GoogleDistanceResponse;
+import order.services.tool.api.model.Row;
 import order.services.tool.exception.DataNotFoundException;
 import order.services.tool.exception.DatabaseException;
 import order.services.tool.model.OrderDetail;
@@ -36,7 +36,6 @@ import order.services.tool.repository.OrderRepository;
 @Service
 public class OrderService
 {
-
     @Autowired
     private GoogleDistanceApiService googleDistanceApiService;
     
@@ -50,7 +49,7 @@ public class OrderService
         final String origin = combineList(request.getOrigin());
         final String destination = combineList(request.getDestination());
 
-        GoogleDistanceResponse response = googleDistanceApiService.connectToApi(origin, destination);
+        final GoogleDistanceResponse response = googleDistanceApiService.connectToApi(origin, destination);
 
         if (response.getStatus().equals(STATUS_OK))
         {
@@ -100,7 +99,6 @@ public class OrderService
     @Transactional
     public OrderDetail updateOrder(OrderStatusRequest request, String id)
     {
-
         final OrderDetail orderDetail = new OrderDetail();
         orderRepository.findById(id).ifPresent(rec -> {
             if (rec.getStatus().equals(STATUS_TAKEN))
@@ -108,15 +106,13 @@ public class OrderService
                 throw new DatabaseException("Order already taken for id: " + id);
             }
         });
-
+        
         if (orderRepository.updateOrderStatus(request.getStatus(), id) == 0)
         {
             throw new DataNotFoundException("No record found for id: " + id);
         }
-
         orderDetail.setStatus(STATUS_SUCCESS);
         return orderDetail;
-
     }
 
     public List<OrderDetail> getPaginatedOrders(Integer page, Integer limit){

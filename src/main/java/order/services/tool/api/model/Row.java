@@ -1,4 +1,4 @@
-package order.services.tool.api;
+package order.services.tool.api.model;
 
 import java.io.Serializable;
 import java.util.List;

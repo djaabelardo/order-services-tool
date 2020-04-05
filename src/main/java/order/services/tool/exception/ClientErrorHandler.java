@@ -1,4 +1,4 @@
-package order.services.tool.api;
+package order.services.tool.exception;
 
 import java.io.IOException;
 

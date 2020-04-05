@@ -30,7 +30,7 @@ public class OrderExceptionHandler
         return new ErrorInformationModel(ex.getMessage());
     }
 
-    @ExceptionHandler({ IOException.class, DatabaseException.class, DataNotFoundException.class, Exception.class })
+    @ExceptionHandler({ IOException.class, DatabaseException.class, DataNotFoundException.class, ApiClientException.class, Exception.class })
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
     public ErrorInformationModel internalError(Exception ex)

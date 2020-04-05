@@ -6,7 +6,6 @@ import static order.services.tool.utils.Constants.KEY;
 import static order.services.tool.utils.Constants.ORIGINS;
 
 import java.io.IOException;
-import java.net.URI;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -20,7 +19,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import order.services.tool.api.model.GoogleDistanceResponse;
 import order.services.tool.config.ConnectionConfig;
+import order.services.tool.exception.ApiClientException;
 
 @Service
 public class GoogleDistanceApiService
@@ -33,10 +34,10 @@ public class GoogleDistanceApiService
         this.restTemplate = restTemplate;
         this.connectionConfig = connectionConfig;
     }
-    
+
     public GoogleDistanceResponse connectToApi(String origin, String destination) throws IOException
     {
-        HttpHeaders headers = new HttpHeaders();
+        final HttpHeaders headers = new HttpHeaders();
         headers.set(ACCEPT, MediaType.APPLICATION_JSON_VALUE);
 
         final HttpEntity< ? > requestEntity = new HttpEntity<>(headers);
@@ -47,16 +48,15 @@ public class GoogleDistanceApiService
                 .queryParam(DESTINATIONS, destination)
                 .queryParam(KEY, connectionConfig.getKey());
 
-        URI uri = builder.build(true).toUri();
-        
-        final ResponseEntity<String> response = this.restTemplate.exchange(uri, HttpMethod.GET, requestEntity, String.class);
+        final ResponseEntity<String> response = this.restTemplate.exchange(builder.build(true).toUri(), HttpMethod.GET,
+                requestEntity, String.class);
 
         if (response.getStatusCode().equals(HttpStatus.OK))
         {
             final ObjectMapper mapper = new ObjectMapper();
             return mapper.readValue(response.getBody(), GoogleDistanceResponse.class);
         }
-        return null;
+        
+        throw new ApiClientException("Unable to retrieve data from Google Maps API.");
     }
-
 }
