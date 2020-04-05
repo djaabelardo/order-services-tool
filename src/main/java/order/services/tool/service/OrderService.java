@@ -3,6 +3,8 @@ package order.services.tool.service;
 import static order.services.tool.utils.Constants.COMMA;
 import static order.services.tool.utils.Constants.STATUS_OK;
 import static order.services.tool.utils.Constants.STATUS_UNASSIGNED;
+import static order.services.tool.utils.Constants.STATUS_SUCCESS;
+import static order.services.tool.utils.Constants.STATUS_TAKEN;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -12,6 +14,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import order.services.tool.api.Distance;
@@ -23,6 +26,7 @@ import order.services.tool.exception.DataNotFoundException;
 import order.services.tool.exception.DatabaseException;
 import order.services.tool.model.OrderDetail;
 import order.services.tool.model.OrderLocationRequest;
+import order.services.tool.model.OrderStatusRequest;
 import order.services.tool.repository.OrderRepository;
 
 @Service
@@ -87,5 +91,27 @@ public class OrderService
     private String combineList(List<String> originDestinations)
     {
         return String.join(COMMA, originDestinations);
+    }
+    
+    @Transactional
+    public OrderDetail updateOrder(OrderStatusRequest request, String id)
+    {
+
+        final OrderDetail orderDetail = new OrderDetail();
+        orderRepository.findById(id).ifPresent(rec -> {
+            if (rec.getStatus().equals(STATUS_TAKEN))
+            {
+                throw new DatabaseException("Order already taken for id: " + id);
+            }
+        });
+
+        if (orderRepository.updateOrderStatus(request.getStatus(), id) == 0)
+        {
+            throw new DataNotFoundException("No record found for id: " + id);
+        }
+
+        orderDetail.setStatus(STATUS_SUCCESS);
+        return orderDetail;
+
     }
 }

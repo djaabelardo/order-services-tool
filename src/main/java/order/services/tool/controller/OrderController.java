@@ -40,9 +40,7 @@ public class OrderController
     @ResponseStatus(HttpStatus.OK)
     public OrderDetail takeOrder(@PathVariable("id") String id, @Valid @RequestBody OrderStatusRequest request)
     {
-
-        return null;
-
+        return orderService.updateOrder(request, id);
     }
     
     @GetMapping(path = "/orders", consumes = { MediaType.APPLICATION_JSON_VALUE })

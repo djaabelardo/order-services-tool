@@ -14,7 +14,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class OrderDetail implements Serializable
 {
-
     private static final long serialVersionUID = -7039713787520750000L;
 
     @Id
@@ -55,5 +54,4 @@ public class OrderDetail implements Serializable
     {
         this.status = status;
     }
-
 }
