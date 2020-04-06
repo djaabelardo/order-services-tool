@@ -29,7 +29,6 @@ pom.xml.next
 release.properties
 
 ### Gradle ###
-/gradle/
 build/
 
 ### Eclipse ###
