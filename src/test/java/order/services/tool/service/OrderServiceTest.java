@@ -20,7 +20,6 @@ import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -29,7 +28,6 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.google.common.collect.Lists;
 
@@ -45,7 +43,6 @@ import order.services.tool.model.OrderLocationRequest;
 import order.services.tool.model.OrderStatusRequest;
 import order.services.tool.repository.OrderRepository;
 
-@RunWith(SpringJUnit4ClassRunner.class)
 public class OrderServiceTest
 {
 
