@@ -26,16 +26,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.google.common.collect.Lists;
 
-import order.services.tool.OrderApplication;
 import order.services.tool.api.GoogleDistanceApiService;
 import order.services.tool.api.model.Distance;
 import order.services.tool.api.model.Element;
@@ -48,9 +45,7 @@ import order.services.tool.model.OrderLocationRequest;
 import order.services.tool.model.OrderStatusRequest;
 import order.services.tool.repository.OrderRepository;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = { OrderApplication.class })
-@ActiveProfiles("test")
+@RunWith(SpringJUnit4ClassRunner.class)
 public class OrderServiceTest
 {
 
