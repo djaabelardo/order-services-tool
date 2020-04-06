@@ -1,7 +1,5 @@
 #!/bin/bash
 
-gradle wrapper
-
 chmod +x gradlew
 
 ./gradlew clean build
