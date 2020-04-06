@@ -7,6 +7,8 @@ import java.util.regex.Pattern;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+import org.springframework.util.CollectionUtils;
+
 public class LocationPatternValidator implements ConstraintValidator<LocationPattern, List<String>>
 {
 
@@ -16,6 +18,12 @@ public class LocationPatternValidator implements ConstraintValidator<LocationPat
     public boolean isValid(List<String> values, ConstraintValidatorContext context)
     {
         boolean isValid = true;
+
+        if (CollectionUtils.isEmpty(values))
+        {
+            return false;
+        }
+
         for (String value : values)
         {
             Matcher matcher = LOCATION_PATTERN.matcher(value);
