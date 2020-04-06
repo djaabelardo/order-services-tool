@@ -1,24 +1,35 @@
 package order.services.tool.service;
 
 import static order.services.tool.utils.Constants.STATUS_OK;
+import static order.services.tool.utils.Constants.STATUS_TAKEN;
 import static order.services.tool.utils.Constants.STATUS_UNASSIGNED;
+import static order.services.tool.utils.Constants.STATUS_SUCCESS;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import com.google.common.collect.Lists;
 
@@ -31,6 +42,7 @@ import order.services.tool.exception.DataNotFoundException;
 import order.services.tool.exception.DatabaseException;
 import order.services.tool.model.OrderDetail;
 import order.services.tool.model.OrderLocationRequest;
+import order.services.tool.model.OrderStatusRequest;
 import order.services.tool.repository.OrderRepository;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -57,6 +69,9 @@ public class OrderServiceTest
 
     @Mock
     private Distance distance;
+
+    @Mock
+    private OrderDetail orderDetail;
 
     private static final String originLatitude = "40.6905615";
     private static final String originLongitude = "-73.9976592";
@@ -141,5 +156,92 @@ public class OrderServiceTest
         when(orderRepository.save(any(OrderDetail.class))).thenThrow(DatabaseException.class);
 
         assertNull(orderService.postOrder(request));
+    }
+
+    @Test
+    public void shouldSuccessfullyUpdateRepository() throws IOException
+    {
+        OrderStatusRequest request = mock(OrderStatusRequest.class);
+        when(request.getStatus()).thenReturn(STATUS_TAKEN);
+
+        OrderDetail orderDetail = new OrderDetail();
+        orderDetail.setStatus(STATUS_UNASSIGNED);
+
+        when(orderRepository.findById(Mockito.anyString())).thenReturn(Optional.of(orderDetail));
+        when(orderRepository.updateOrderStatus(Mockito.anyString(), Mockito.anyString())).thenReturn(1);
+
+        OrderDetail result = orderService.updateOrder(request, "id");
+
+        assertNotNull(result);
+        assertEquals(STATUS_SUCCESS, result.getStatus());
+    }
+
+    @Test(expected = DataNotFoundException.class)
+    public void shouldValidateIfNoRecordFound()
+    {
+        OrderStatusRequest request = mock(OrderStatusRequest.class);
+        when(request.getStatus()).thenReturn(STATUS_TAKEN);
+
+        OrderDetail orderDetail = new OrderDetail();
+        orderDetail.setStatus(STATUS_UNASSIGNED);
+
+        when(orderRepository.findById(Mockito.anyString())).thenReturn(Optional.of(orderDetail));
+        when(orderRepository.updateOrderStatus(Mockito.anyString(), Mockito.anyString())).thenReturn(0);
+
+        OrderDetail result = orderService.updateOrder(request, "id");
+
+        assertNotNull(result);
+        assertEquals(STATUS_SUCCESS, result.getStatus());
+    }
+
+    @Test(expected = DatabaseException.class)
+    public void shouldValidateIfStatusIsTaken()
+    {
+        OrderStatusRequest request = mock(OrderStatusRequest.class);
+
+        OrderDetail orderDetail = new OrderDetail();
+        orderDetail.setStatus(STATUS_TAKEN);
+
+        when(orderRepository.findById(Mockito.anyString())).thenReturn(Optional.of(orderDetail));
+
+        assertNull(orderService.updateOrder(request, "id"));
+    }
+
+    @Test
+    public void shouldSuccessfullyRetrieveOrdersByPage()
+    {
+        ArgumentCaptor<Pageable> pageableCaptor = ArgumentCaptor.forClass(Pageable.class);
+
+        @SuppressWarnings("unchecked")
+        Page<OrderDetail> orderDetailPage = mock(Page.class);
+        when(orderDetailPage.getContent()).thenReturn(Lists.newArrayList(orderDetail));
+        when(orderRepository.findAll(pageableCaptor.capture())).thenReturn(orderDetailPage);
+
+        List<OrderDetail> orderDetail = orderService.getPaginatedOrders(2, 5);
+
+        PageRequest pageable = (PageRequest) pageableCaptor.getValue();
+        verify(orderRepository).findAll(pageableCaptor.capture());
+
+        assertEquals(1, pageable.getPageNumber());
+        assertEquals(5, pageable.getPageSize());
+        assertFalse(orderDetail.isEmpty());
+    }
+
+    @Test
+    public void shouldNotRetrieveOrderDetailsIfResultIsEmpty()
+    {
+        ArgumentCaptor<Pageable> pageableCaptor = ArgumentCaptor.forClass(Pageable.class);
+
+        @SuppressWarnings("unchecked")
+        Page<OrderDetail> orderDetailPage = mock(Page.class);
+        when(orderDetailPage.getContent()).thenReturn(Lists.newArrayList());
+        when(orderRepository.findAll(pageableCaptor.capture())).thenReturn(orderDetailPage);
+
+        List<OrderDetail> orderDetail = orderService.getPaginatedOrders(2, 5);
+
+        verify(orderRepository).findAll(pageableCaptor.capture());
+
+        assertTrue(orderDetail.isEmpty());
+
     }
 }
