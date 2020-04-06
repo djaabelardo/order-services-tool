@@ -7,6 +7,7 @@ import static order.services.tool.utils.Constants.STATUS_UNASSIGNED;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -29,7 +30,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import com.google.common.collect.Lists;
 
@@ -82,7 +82,6 @@ public class OrderServiceTest
     public void init()
     {
         MockitoAnnotations.initMocks(this);
-        orderService = new OrderService(orderRepository, googleDistanceApiService);
     }
 
     @Test
@@ -131,8 +130,8 @@ public class OrderServiceTest
         when(response.getStatus()).thenReturn(STATUS_OK);
 
         when(googleDistanceApiService.connectToApi(Mockito.anyString(), Mockito.anyString())).thenReturn(response);
-        orderService.postOrder(request);
-//        assertNull();
+
+        assertNull(orderService.postOrder(request));
     }
 
     @Test(expected = DatabaseException.class)
@@ -156,8 +155,7 @@ public class OrderServiceTest
         when(googleDistanceApiService.connectToApi(Mockito.anyString(), Mockito.anyString())).thenReturn(response);
         when(orderRepository.save(any(OrderDetail.class))).thenThrow(DatabaseException.class);
 
-        orderService.postOrder(request);
-//        assertNull();
+        assertNull(orderService.postOrder(request));
     }
 
     @Test
@@ -206,8 +204,7 @@ public class OrderServiceTest
 
         when(orderRepository.findById(Mockito.anyString())).thenReturn(Optional.of(orderDetail));
 
-        orderService.updateOrder(request, "id");
-//        assertNull();
+        assertNull(orderService.updateOrder(request, "id"));
     }
 
     @Test

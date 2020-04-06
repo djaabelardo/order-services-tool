@@ -36,17 +36,11 @@ import order.services.tool.repository.OrderRepository;
 @Service
 public class OrderService
 {
-
-    private GoogleDistanceApiService googleDistanceApiService;
-
-    private OrderRepository orderRepository;
-
     @Autowired
-    public OrderService(OrderRepository orderRepository, GoogleDistanceApiService googleDistanceApiService)
-    {
-        this.orderRepository = orderRepository;
-        this.googleDistanceApiService = googleDistanceApiService;
-    }
+    private GoogleDistanceApiService googleDistanceApiService;
+    
+    @Autowired
+    private OrderRepository orderRepository;
 
     public OrderDetail postOrder(OrderLocationRequest request) throws IOException
     {
@@ -62,7 +56,7 @@ public class OrderService
             calculateTotalDistance(orderDetail, response);
             orderDetail.setStatus(STATUS_UNASSIGNED);
             orderDetail.setId(UUID.randomUUID().toString());
-
+            
             try
             {
                 orderRepository.save(orderDetail);
@@ -101,7 +95,7 @@ public class OrderService
     {
         return String.join(COMMA, originDestinations);
     }
-
+    
     @Transactional
     public OrderDetail updateOrder(OrderStatusRequest request, String id)
     {
@@ -112,7 +106,7 @@ public class OrderService
                 throw new DatabaseException("Order already taken for id: " + id);
             }
         });
-
+        
         if (orderRepository.updateOrderStatus(request.getStatus(), id) == 0)
         {
             throw new DataNotFoundException("No record found for id: " + id);
@@ -121,12 +115,11 @@ public class OrderService
         return orderDetail;
     }
 
-    public List<OrderDetail> getPaginatedOrders(Integer page, Integer limit)
-    {
-
+    public List<OrderDetail> getPaginatedOrders(Integer page, Integer limit){
+        
         Pageable paging = PageRequest.of(page - 1, limit, Sort.by("distance"));
         Page<OrderDetail> pagedResult = orderRepository.findAll(paging);
-
+        
         return pagedResult.getContent();
     }
 }
