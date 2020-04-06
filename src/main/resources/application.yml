@@ -2,6 +2,10 @@
 spring:
   profiles:
     active: local
+    
+---
+spring:
+  profiles: local
   data:
     web:
       pageable:
@@ -22,6 +26,38 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
     
+google-distance:
+  api:
+    url: https://maps.googleapis.com/maps/api
+    contextPath: /distancematrix/json
+    key: AIzaSyB1kvAJG6g3PHdlgjk7fl8tLl1YZL1p7Ww
+    connectionTimeout: 30000
+    readTimeout: 30000
+      
+server:
+  port: 8080
+  ssl:
+    enabled: false
+    
+---
+spring:
+  profiles: test
+  datasource:
+     driver-class-name: org.h2.Driver
+     url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1
+     username: sa
+     password: sa
+     data:
+  jpa:
+    show-sql: true
+    hibernate:
+      generate-ddl: true
+      ddl-auto: create
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+ 
 google-distance:
   api:
     url: https://maps.googleapis.com/maps/api
