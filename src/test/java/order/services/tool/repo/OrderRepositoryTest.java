@@ -1,5 +1,6 @@
 package order.services.tool.repo;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
@@ -35,6 +36,7 @@ public class OrderRepositoryTest
         OrderDetail orderDetailRecord = orderRepository.save(orderDetail);
 
         assertNotNull(orderDetailRecord);
+        assertEquals("id", orderDetailRecord.getId());
     }
 
     @Test
@@ -44,4 +46,5 @@ public class OrderRepositoryTest
         Page<OrderDetail> orderDetailRecord = orderRepository.findAll(paging);
         assertNotNull(orderDetailRecord);
     }
+ 
 }
