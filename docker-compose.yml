@@ -2,10 +2,11 @@ version: '3'
 
 services:
   docker-mysql:
-    image: mysql:latest
+    image: mysql
     environment:
       MYSQL_DATABASE: orders
       MYSQL_ROOT_PASSWORD: password
+      MYSQL_PASSWORD: password
       
     ports:
       - "6033:3306"
@@ -17,4 +18,4 @@ services:
     depends_on: 
        - docker-mysql
     environment: 
-       - SPRING_DATASOURCE_URL=jdbc:mysql://docker-mysql:3306/orders?useUnicode=true&characterEncoding=utf8&useSSL=false
+       - SPRING_DATASOURCE_URL=jdbc:mysql://docker-mysql:3306/orders
