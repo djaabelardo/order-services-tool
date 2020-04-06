@@ -1,9 +1,9 @@
 package order.services.tool.service;
 
 import static order.services.tool.utils.Constants.STATUS_OK;
+import static order.services.tool.utils.Constants.STATUS_SUCCESS;
 import static order.services.tool.utils.Constants.STATUS_TAKEN;
 import static order.services.tool.utils.Constants.STATUS_UNASSIGNED;
-import static order.services.tool.utils.Constants.STATUS_SUCCESS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -11,8 +11,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.util.List;
@@ -26,13 +26,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import com.google.common.collect.Lists;
 
+import order.services.tool.OrderApplication;
 import order.services.tool.api.GoogleDistanceApiService;
 import order.services.tool.api.model.Distance;
 import order.services.tool.api.model.Element;
@@ -45,7 +48,9 @@ import order.services.tool.model.OrderLocationRequest;
 import order.services.tool.model.OrderStatusRequest;
 import order.services.tool.repository.OrderRepository;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = { OrderApplication.class })
+@ActiveProfiles("test")
 public class OrderServiceTest
 {
 
