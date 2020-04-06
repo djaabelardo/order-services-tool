@@ -43,11 +43,14 @@
    "status": "OK"
 }
 ```
-## REST APIs
+## REST APIs Created
 
 1.  POST 
  - Sample Request:
 ```
+http://localhost:8080/orders
+
+Request Body
 {
     "origin": ["14.554729", "121.024445"],
     "destination": ["13.385680", "123.678818"]
