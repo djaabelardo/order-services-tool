@@ -13,6 +13,7 @@ plugins {
     id 'application'
     id 'distribution'
     id "io.spring.dependency-management" version "1.0.6.RELEASE"
+    id 'com.google.cloud.tools.jib' version '1.8.0'
 }
 
 apply plugin: 'org.springframework.boot'
@@ -31,7 +32,6 @@ ext {
     commonsLangVersion = '3.7'
     httpClientVersion = '4.5.5'
     jsonVersion="20171018"
-    mongobeeVersion="0.13"
     mysqlVersion = "8.0.19"
 }
 
@@ -63,8 +63,6 @@ dependencies {
     compile "mysql:mysql-connector-java:${mysqlVersion}"
     compile "org.apache.commons:commons-lang3:${commonsLangVersion}"
     compile "org.apache.httpcomponents:httpclient:${httpClientVersion}"
-    compile("org.springframework.boot:spring-boot-starter-data-mongodb:${springBootVersion}")
-    compile("com.github.mongobee:mongobee:${mongobeeVersion}")
 
     testCompile "junit:junit:${junitVersion}"
     testCompile 'org.springframework.boot:spring-boot-starter-test'

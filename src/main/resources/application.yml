@@ -1,4 +1,3 @@
-# MongoDB properties
 spring:
   profiles:
     active: local
@@ -10,8 +9,6 @@ spring:
     web:
       pageable:
         one-indexed-parameters: true
-    mongodb:
-      uri: mongodb://127.0.0.1:27017/local
   dataSource:
     url: jdbc:mysql://localhost:3306/orders
     username: root
